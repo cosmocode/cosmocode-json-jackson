@@ -6,6 +6,8 @@ import java.io.Writer;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
@@ -16,13 +18,13 @@ public final class JsonGeneratorRendererStringWriterTest extends AbstractJSONRen
 
     @Override
     protected JSONRenderer doCreate(final Writer writer) {
-    	final JsonFactory factory = new JsonFactory();
+        final JsonFactory factory = new JsonFactory();
         try {
-        	final JsonGenerator generator = factory.createJsonGenerator(writer);
-			return new JsonGeneratorRenderer(generator);
-		} catch (IOException e) {
-			throw new IllegalStateException(e);
-		}
+            final JsonGenerator generator = factory.createJsonGenerator(writer);
+            return new JsonGeneratorRenderer(generator);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
     
     @Override
@@ -33,6 +35,48 @@ public final class JsonGeneratorRendererStringWriterTest extends AbstractJSONRen
     @Override
     protected String toString(Writer writer) throws IOException {
         return writer.toString();
+    }
+    
+    @Override
+    @Test
+    @Ignore("The Jackson JsonGenerator can handle infinity")
+    public void valueFloatPositiveInfinite() {
+        super.valueFloatPositiveInfinite();
+    }
+    
+    @Override
+    @Test
+    @Ignore("The Jackson JsonGenerator can handle infinity")
+    public void valueFloatNegativeInfinite() {
+        super.valueFloatNegativeInfinite();
+    }
+    
+    @Override
+    @Test
+    @Ignore("The Jackson JsonGenerator can handle NaN")
+    public void valueFloatNaN() {
+        super.valueFloatNaN();
+    }
+    
+    @Override
+    @Test
+    @Ignore("The Jackson JsonGenerator can handle infinity")
+    public void valueDoublePositiveInfinite() {
+        super.valueDoublePositiveInfinite();
+    }
+    
+    @Override
+    @Test
+    @Ignore("The Jackson JsonGenerator can handle infinity")
+    public void valueDoubleNegativeInfinite() {
+        super.valueDoubleNegativeInfinite();
+    }
+    
+    @Override
+    @Test
+    @Ignore("The Jackson JsonGenerator can handle NaN")
+    public void valueDoubleNaN() {
+        super.valueDoubleNaN();
     }
 
 }
