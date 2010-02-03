@@ -1,48 +1,30 @@
 package de.cosmocode.json;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
 /**
- * Tests the {@link JsonGeneratorRenderer} on its abilities as a {@link JSONRenderer}.
- * It uses a StringWriter to create Strings from the output.
+ * Tests the {@link JacksonRenderer} on its abilities as a {@link JSONRenderer}.
  * 
- * @author Oliver Lorenz
+ * @author olorenz
  */
 @RunWith(BlockJUnit4ClassRunner.class)
-public final class JsonGeneratorRendererStringWriterTest extends AbstractJSONRendererWriterTest {
-
+public final class JacksonRendererTest extends AbstractJSONRendererTest {
+    
     @Override
-    protected JSONRenderer doCreate(final Writer writer) {
-        final JsonFactory factory = new JsonFactory();
-        try {
-            final JsonGenerator generator = factory.createJsonGenerator(writer);
-            return new JsonGeneratorRenderer(generator);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+    protected JSONRenderer create() {
+        return new JacksonRenderer();
     }
     
     @Override
-    protected Writer createWriter() throws IOException {
-        return new StringWriter();
-    }
-    
-    @Override
-    protected String toString(Writer writer) throws IOException {
-        return writer.toString();
+    protected String toJSONString(final JSONRenderer renderer) {
+        return renderer.toString();
     }
     
     /**
-     * <p> Tests the performance of the {@link JsonGeneratorRenderer}.
+     * <p> Tests the performance of the {@link JacksonRenderer}.
      * </p>
      * <p> <strong> Important: </strong> This is not a full scale performance test.
      * If performance issues are of importance, please make your own performance tests.
@@ -74,7 +56,7 @@ public final class JsonGeneratorRendererStringWriterTest extends AbstractJSONRen
         result = toJSONString(renderer);
         
         end = System.currentTimeMillis();
-        
+
         System.out.println("Results of Performance Test:");
         System.out.println("Needed " + (end - start) + " ms for " + loopCount + " loops.");
         System.out.println("Result is " + result.length() + " characters long");

@@ -1,4 +1,4 @@
-package de.cosmcode.json;
+package de.cosmocode.json;
 
 import java.io.IOException;
 
@@ -10,10 +10,6 @@ import org.json.extension.NoObjectContext;
 
 import com.google.common.base.Preconditions;
 
-import de.cosmocode.json.AbstractJSONRenderer;
-import de.cosmocode.json.JSON;
-import de.cosmocode.json.JSONRenderer;
-import de.cosmocode.json.RenderLevel;
 import de.cosmocode.patterns.Adapter;
 
 /**
@@ -22,12 +18,12 @@ import de.cosmocode.patterns.Adapter;
  * </p>
  * <p> This class does not support toString(), but writes directly into
  * the JsonGenerator instead. If you want toString()-Support, use
- * (...) instead.
+ * {@link JacksonRenderer} instead.
  * </p>
  * @author Oliver Lorenz
  */
 @Adapter(JSONRenderer.class)
-public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements JSONRenderer {
+public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements CloseableJsonRenderer {
     
     public static final String ERR_TOSTRING_UNSUPPORTED = "JsonGeneratorRenderer writes directly";
     public static final String ERR_BEFORE_FIRST = "Illegal initial call on a key or value method";
@@ -54,6 +50,8 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     }
     
     public JsonGeneratorRenderer(final JsonGenerator generator, final RenderLevel level) {
+        super();
+        
         this.generator = Preconditions.checkNotNull(generator, "Generator");
         this.level = Preconditions.checkNotNull(level, "Level");
         
@@ -63,6 +61,29 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
         }
     }
     
+    
+    /**
+     * <p> Checks {@code renderDepth > 0} to see if the render process is running.
+     * It throws an IllegalStateException if that is not the case.
+     * </p>
+     * <p> The render process has started if the first call was array() or object()
+     * (or a similar method that can be called first), and if we are not after the
+     * last call.
+     * </p>
+     * 
+     * @see #checkBeforeFirst()
+     * @see #checkAfterLast()
+     */
+    protected void checkRenderRunning() {
+        if (renderDepth > 0) {
+            return;
+        } else if (renderDepth == 0) {
+            throw new IllegalStateException(ERR_AFTER_LAST);
+        } else {
+            // renderDepth < 0
+            throw new IllegalStateException(ERR_BEFORE_FIRST);
+        }
+    }
     
     /**
      * <p> Checks {@code renderDepth < 0} to see if we are before the first call.
@@ -95,6 +116,10 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
         }
     }
     
+    public JsonGenerator getGenerator() {
+        return generator;
+    }
+    
     @Override
     public RenderLevel currentLevel() {
         return level;
@@ -117,12 +142,11 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer endArray() {
-        checkBeforeFirst();
-        checkAfterLast();
+        checkRenderRunning();
         try {
             generator.writeEndArray();
-            generator.flush();
             --renderDepth;
+            if (renderDepth == 0) generator.flush();
         } catch (JsonGenerationException e) {
             throw new IllegalStateException(e);
         } catch (IOException e) {
@@ -148,12 +172,11 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer endObject() {
-        checkBeforeFirst();
-        checkAfterLast();
+        checkRenderRunning();
         try {
             generator.writeEndObject();
-            generator.flush();
             --renderDepth;
+            if (renderDepth == 0) generator.flush();
         } catch (JsonGenerationException e) {
             throw new IllegalStateException(e);
         } catch (IOException e) {
@@ -164,8 +187,7 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer key(final CharSequence key) {
-        checkBeforeFirst();
-        checkAfterLast();
+        checkRenderRunning();
         try {
             generator.writeFieldName(key == null ? "null" : key.toString());
         } catch (JsonGenerationException e) {
@@ -178,8 +200,7 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer nullValue() {
-        checkBeforeFirst();
-        checkAfterLast();
+        checkRenderRunning();
         try {
             generator.writeNull();
         } catch (JsonGenerationException e) {
@@ -198,8 +219,10 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
         } else {
             try {
                 generator.writeObject(value);
-                generator.flush();
-                if (this.renderDepth < 0) this.renderDepth = 0;
+                if (this.renderDepth <= 0) {
+                    this.renderDepth = 0;
+                    generator.flush();
+                }
             } catch (JsonGenerationException e) {
                 throw new IllegalStateException(e);
             } catch (IOException e) {
@@ -211,8 +234,7 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer value(boolean value) {
-        checkBeforeFirst();
-        checkAfterLast();
+        checkRenderRunning();
         try {
             generator.writeBoolean(value);
         } catch (JsonGenerationException e) {
@@ -225,8 +247,7 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer value(long value) {
-        checkBeforeFirst();
-        checkAfterLast();
+        checkRenderRunning();
         try {
             generator.writeNumber(value);
         } catch (JsonGenerationException e) {
@@ -239,8 +260,7 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer value(double value) {
-        checkBeforeFirst();
-        checkAfterLast();
+        checkRenderRunning();
         try {
             generator.writeNumber(value);
         } catch (JsonGenerationException e) {
@@ -254,9 +274,8 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     @Override
     public JSONRenderer value(CharSequence value) {
         if (value == null) return nullValue();
-        
-        checkBeforeFirst();
-        checkAfterLast();
+
+        checkRenderRunning();
         try {
             generator.writeString(value.toString());
         } catch (JsonGenerationException e) {
@@ -270,9 +289,8 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     @Override
     public JSONRenderer pairs(NoObjectContext pairs) {
         if (pairs == null) return this;
-        
-        checkBeforeFirst();
-        checkAfterLast();
+
+        checkRenderRunning();
         try {
             pairs.encodeJSON(JSON.asJSONConstructor(this));
         } catch (JSONException e) {
@@ -283,7 +301,6 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     @Override
     public JSONRenderer object(NoObjectContext pairs) {
-        checkAfterLast();
         return object().pairs(pairs).endObject();
     }
     
@@ -293,10 +310,25 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
         if (object == null) return object().endObject();
         try {
             object.encodeJSON(JSON.asJSONConstructor(this));
-            return this;
         } catch (JSONException e) {
             throw new IllegalArgumentException(e);
         }
+        if (renderDepth == 0) {
+            try {
+                generator.flush();
+            } catch (IOException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+        return this;
+    }
+    
+    @Override
+    public void close() throws IOException {
+        if (generator.isClosed()) return;
+        
+        generator.flush();
+        generator.close();
     }
     
     @Override
