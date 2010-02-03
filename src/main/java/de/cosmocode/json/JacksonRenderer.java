@@ -102,9 +102,9 @@ public final class JacksonRenderer extends ForwardingJSONRenderer implements Clo
             return writer.toString();
         } else {
             try {
-                renderer.close();
+                renderer.getGenerator().flush();
             } catch (IOException e) {
-                throw new IllegalStateException("Closing the JsonGeneratorRenderer failed", e);
+                throw new IllegalStateException("Flushing the JsonGeneratorRenderer failed", e);
             }
             return writer.toString();
         }

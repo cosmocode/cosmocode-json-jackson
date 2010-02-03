@@ -66,7 +66,7 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
      * <p> Checks {@code renderDepth > 0} to see if the render process is running.
      * It throws an IllegalStateException if that is not the case.
      * </p>
-     * <p> The render process has started if the first call was array() or object()
+     * <p> The render process is running if the first call was array() or object()
      * (or a similar method that can be called first), and if we are not after the
      * last call.
      * </p>

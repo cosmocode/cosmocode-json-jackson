@@ -259,7 +259,7 @@ public final class Jackson {
      * 
      * @author Oliver Lorenz
      */
-    public static class ImmutableJsonFactory extends JsonFactory {
+    public static final class ImmutableJsonFactory extends JsonFactory {
         
         @Override
         public JsonFactory disable(final JsonGenerator.Feature f) {
