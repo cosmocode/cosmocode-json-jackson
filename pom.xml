@@ -35,7 +35,7 @@
     <dependency>
       <groupId>de.cosmocode</groupId>
       <artifactId>cosmocode-json</artifactId>
-      <version>1.0.6</version>
+      <version>[1.1-SNAPSHOT,2)</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
