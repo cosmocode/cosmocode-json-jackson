@@ -47,8 +47,6 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     
     private final JsonGenerator generator;
     
-    private final RenderLevel level;
-    
     /**
      * indicates the depth of the current render process.
      * For example: this.object().object() would result in renderDepth = 2,
@@ -62,21 +60,12 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
      * @param generator the JsonGenerator to adapt
      */
     public JsonGeneratorRenderer(final JsonGenerator generator) {
-        this(generator, JSONRenderer.DEFAULT_LEVEL);
-    }
-    
-    public JsonGeneratorRenderer(final JsonGenerator generator, final RenderLevel level) {
-        super();
-        
         this.generator = Preconditions.checkNotNull(generator, "Generator");
-        this.level = Preconditions.checkNotNull(level, "Level");
-        
         // test if generator can write output
         if (this.generator.isClosed()) {
             throw new IllegalStateException("The given JsonGenerator is already closed");
         }
     }
-    
     
     /**
      * <p> Checks {@code renderDepth > 0} to see if the render process is running.
@@ -136,11 +125,6 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
         return generator;
     }
     
-    @Override
-    public RenderLevel currentLevel() {
-        return level;
-    }
-
     @Override
     public JSONRenderer array() {
         checkAfterLast();

@@ -43,15 +43,6 @@ public final class JacksonRenderer extends ForwardingJSONRenderer implements Clo
     }
     
     /**
-     * Creates a default JacksonRenderer, using a cached {@link JsonFactory} for creation.
-     * The RenderLevel is set to the given parameter.
-     * @param level the RenderLevel for the {@link JSONRenderer}
-     */
-    public JacksonRenderer(final RenderLevel level) {
-        this(Jackson.FACTORY, level);
-    }
-    
-    /**
      * Creates a new JacksonRenderer that only has the given {@link JsonGenerator.Feature}s enabled.
      * @param features the features to enable
      */
@@ -80,28 +71,6 @@ public final class JacksonRenderer extends ForwardingJSONRenderer implements Clo
         this.renderer = new JsonGeneratorRenderer(generator);
     }
     
-    /**
-     * Creates a new JacksonRenderer from the given {@link JsonFactory}.
-     * All calls are delegated to a {@link JsonGeneratorRenderer} adapter.
-     * @param factory the factory to create the {@link JsonGenerator} from
-     * @param level the RenderLevel for the {@link JSONRenderer}
-     * 
-     * @see JsonGeneratorRenderer#JsonGeneratorRenderer(JsonGenerator, RenderLevel)
-     */
-    public JacksonRenderer(final JsonFactory factory, final RenderLevel level) {
-        super();
-        
-        this.writer = new StringWriter();
-        
-        final JsonGenerator generator;
-        try {
-            generator = factory.createJsonGenerator(writer);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("The given factory could not create a JsonGenerator", e);
-        }
-        this.renderer = new JsonGeneratorRenderer(generator, level);
-    }
-
     @Override
     protected JSONRenderer delegate() {
         return renderer;

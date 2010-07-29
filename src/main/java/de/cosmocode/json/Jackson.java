@@ -66,21 +66,6 @@ public final class Jackson {
     
     /**
      * <p> Creates a {@link JSONRenderer} backed by the Jackson framework.
-     * </p>
-     * <p> The returned JsonRenderer supports toString(), which closes the underlying
-     * {@link JsonGenerator} and returns the current parsing process as a String.
-     * Only toString() can be called after a call to toString(),
-     * all other methods throw {@link IllegalStateException}s.
-     * </p>
-     * @param level the RenderLevel of the JsonRenderer
-     * @return a {@link JSONRenderer} backed by the Jackson framework
-     */
-    public static CloseableJsonRenderer createJsonRenderer(final RenderLevel level) {
-        return new JacksonRenderer(level);
-    }
-    
-    /**
-     * <p> Creates a {@link JSONRenderer} backed by the Jackson framework.
      * It only supports the given {@link JsonGenerator.Feature}s,
      * all other features are disabled.
      * </p>
@@ -121,30 +106,6 @@ public final class Jackson {
     
     /**
      * <p> Creates a {@link JSONRenderer} that directly writes to the given OutputStream,
-     * using UTF8 as character encoding.
-     * </p>
-     * <p> <strong> Important: </strong> The JsonRenderer that this method returns
-     * does not support the toString() method. All data is directly written to the given
-     * OutputStream and flushed after the last endArray() or endObject() call.
-     * If you want to manually close it, then cast the returned object to {@link Closeable}
-     * and close it.
-     * </p>
-     * @param out the OutputStream to write on
-     * @param level the RenderLevel of the JsonRenderer
-     * @return a new JsonRenderer that writes its output on the given OutputStream.
-     * @throws IOException if the creation fails due to low-level IO exceptions
-     * 
-     * @see JsonFactory#createJsonGenerator(OutputStream, JsonEncoding)
-     */
-    public static CloseableJsonRenderer createJsonRenderer(final OutputStream out, final RenderLevel level)
-        throws IOException {
-
-        final JsonGenerator generator = FACTORY.createJsonGenerator(out, DEFAULT_ENCODING);
-        return new JsonGeneratorRenderer(generator, level);
-    }
-    
-    /**
-     * <p> Creates a {@link JSONRenderer} that directly writes to the given OutputStream,
      * using the given {@link JsonEncoding} as character encoding.
      * </p>
      * <p> <strong> Important: </strong> The JsonRenderer that this method returns
@@ -165,32 +126,6 @@ public final class Jackson {
         
         final JsonGenerator generator = FACTORY.createJsonGenerator(out, encoding);
         return new JsonGeneratorRenderer(generator);
-    }
-    
-    /**
-     * <p> Creates a {@link JSONRenderer} that directly writes to the given OutputStream,
-     * using the given {@link JsonEncoding} as character encoding.
-     * </p>
-     * <p> <strong> Important: </strong> The JsonRenderer that this method returns
-     * does not support the toString() method. All data is directly written to the given
-     * OutputStream and flushed after the last endArray() or endObject() call.
-     * If you want to manually close it, then cast the returned object to {@link Closeable}
-     * and close it.
-     * </p>
-     * @param out the OutputStream to write on
-     * @param encoding the character encoding to use for writing on the stream
-     * @param level the RenderLevel of the JsonRenderer
-     * @return a new JsonRenderer that writes its output on the given OutputStream.
-     * @throws IOException if the creation fails due to low-level IO exceptions
-     * 
-     * @see JsonFactory#createJsonGenerator(OutputStream, JsonEncoding)
-     */
-    public static CloseableJsonRenderer createJsonRenderer(
-        final OutputStream out, final JsonEncoding encoding, final RenderLevel level)
-        throws IOException {
-        
-        final JsonGenerator generator = FACTORY.createJsonGenerator(out, encoding);
-        return new JsonGeneratorRenderer(generator, level);
     }
     
     /**
@@ -216,32 +151,6 @@ public final class Jackson {
             throw new IllegalStateException("Illegal IOException during factory creation using Writer", ioe);
         }
         return new JsonGeneratorRenderer(generator);
-    }
-    
-    /**
-     * <p> Creates a {@link JSONRenderer} that writes the rendered Json into the given {@link Writer}.
-     * </p>
-     * <p> <strong> Important: </strong> The JsonRenderer that this method returns
-     * does not support the toString() method. All data is directly written to the given
-     * Writer and flushed after the last endArray() or endObject() call.
-     * If you want to manually close it, then cast the returned object to {@link Closeable}
-     * and close it.
-     * </p>
-     * @param writer a {@link Writer}; the rendered json is written to this Writer
-     * @param level the RenderLevel of the JsonRenderer
-     * @return a new JsonRenderer that writes its output to the given Writer.
-     * 
-     * @see JsonFactory#createJsonGenerator(Writer)
-     */
-    public static CloseableJsonRenderer createJsonRenderer(final Writer writer, final RenderLevel level) {
-        
-        final JsonGenerator generator;
-        try {
-            generator = FACTORY.createJsonGenerator(writer);
-        } catch (final IOException ioe) {
-            throw new IllegalStateException("Illegal IOException during factory creation using Writer", ioe);
-        }
-        return new JsonGeneratorRenderer(generator, level);
     }
     
     /**

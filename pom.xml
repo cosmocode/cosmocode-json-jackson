@@ -1,48 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<parent>
-		<artifactId>cosmocode-parent</artifactId>
-		<groupId>de.cosmocode</groupId>
-		<version>2.3.2</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.cosmocode</groupId>
-	<artifactId>cosmocode-json-jackson</artifactId>
-	<name>CosmoCode Json Jackson</name>
-	<version>1.0-SNAPSHOT</version>
-	<description>An adapter from the json interfaces to the jackson implementation</description>
-	<scm>
-		<developerConnection>scm:svn:https://commons.svn.cosmocode.de/cosmocode-json-jackson/trunk</developerConnection>
-	</scm>
-	<repositories>
-		<repository>
-			<id>cosmocode-public</id>
-			<name>CosmoCode Public Maven Repository</name>
-			<url>http://mvn.cosmocode.de/</url>
-		</repository>
-	</repositories>
-	<dependencies>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>1.5.0</version>
-		</dependency>
-		<dependency>
-			<groupId>de.cosmocode</groupId>
-			<artifactId>cosmocode-json</artifactId>
-			<version>1.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>de.cosmocode</groupId>
-			<artifactId>cosmocode-json</artifactId>
-			<version>1.0.6</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.cosmocode</groupId>
-			<artifactId>cosmocode-junit</artifactId>
-			<version>1.2</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>cosmocode-parent</artifactId>
+    <groupId>de.cosmocode</groupId>
+    <version>2.3.2</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.cosmocode</groupId>
+  <artifactId>cosmocode-json-jackson</artifactId>
+  <name>CosmoCode Json Jackson</name>
+  <version>1.0-SNAPSHOT</version>
+  <description>An adapter from the json interfaces to the jackson implementation</description>
+  <scm>
+    <developerConnection>scm:svn:https://commons.svn.cosmocode.de/cosmocode-json-jackson/trunk</developerConnection>
+  </scm>
+  <repositories>
+    <repository>
+      <id>cosmocode-public</id>
+      <name>CosmoCode Public Maven Repository</name>
+      <url>http://mvn.cosmocode.de/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>1.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.cosmocode</groupId>
+      <artifactId>cosmocode-json</artifactId>
+      <version>[1.1-SNAPSHOT,2)</version>
+    </dependency>
+    <dependency>
+      <groupId>de.cosmocode</groupId>
+      <artifactId>cosmocode-json</artifactId>
+      <version>1.0.6</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>de.cosmocode</groupId>
+      <artifactId>cosmocode-junit</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
