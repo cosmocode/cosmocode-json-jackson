@@ -215,7 +215,8 @@ public final class JsonGeneratorRenderer extends AbstractJSONRenderer implements
     protected JSONRenderer unknownValue(Object value) {
         checkAfterLast();
         if (generator.getCodec() == null) {
-            return super.unknownValue(value);
+            super.unknownValue(value);
+            return this;
         } else {
             try {
                 generator.writeObject(value);
