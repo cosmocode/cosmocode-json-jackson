@@ -151,7 +151,16 @@ public final class JacksonRenderer extends AbstractRenderer {
 
     @Override
     public String build() throws RenderingException {
-        return writer.toString();
+        if (generator.isClosed()) {
+            return writer.toString();
+        } else {
+            try {
+                generator.close();
+            } catch (IOException e) {
+                throw new RenderingException(e);
+            }
+            return writer.toString();
+        }
     }
 
 }
