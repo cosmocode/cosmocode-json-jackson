@@ -45,5 +45,5 @@ public final class JacksonRendererTest implements UnitProvider<Renderer> {
         unit.map().key("key").value("value").endMap();
         Assert.assertEquals("{\"key\":\"value\"}", unit.build());
     }
-
+    
 }
