@@ -8,9 +8,9 @@
   <groupId>de.cosmocode</groupId>
   <artifactId>cosmocode-json-jackson</artifactId>
   <name>CosmoCode Json Jackson</name>
-  <version>1.0.0</version>
+  <version>1.1-SNAPSHOT</version>
   <scm>
-    <developerConnection>scm:svn:https://commons.svn.cosmocode.de/cosmocode-json-jackson/tags/1.0.0</developerConnection>
+    <developerConnection>scm:svn:https://commons.svn.cosmocode.de/cosmocode-json-jackson/trunk</developerConnection>
   </scm>
   <repositories>
     <repository>
