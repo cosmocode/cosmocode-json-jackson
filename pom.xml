@@ -34,7 +34,7 @@
     <dependency>
       <groupId>de.cosmocode</groupId>
       <artifactId>cosmocode-junit</artifactId>
-      <version>1.4.3</version>
+      <version>[1.4.3,2)</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
