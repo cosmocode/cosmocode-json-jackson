@@ -81,7 +81,6 @@ public final class StreamingJacksonRenderer extends ForwardingJacksonRenderer {
     
     @Override
     public JsonGenerator build() throws RenderingException {
-        // FIXME UnsupportedOperationException would be compliant with the spec
         if (generator.isClosed()) {
             return generator;
         } else {
